@@ -1,4 +1,4 @@
-# hack-or-snooze-ajax-api
+# Hack-or-Snooze
 
 A simple clone of the news aggregator Hacker News using JavaScript, AJAX, and jQuery
 
