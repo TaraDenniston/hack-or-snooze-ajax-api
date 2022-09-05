@@ -50,3 +50,33 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+
+/** Get the data from the #add-story-form, call the .addStory method, and 
+ * put the new story on the page. */
+
+async function addNewStoryOnPage(evt) {
+  console.debug("addNewStoryOnPage", evt);
+  evt.preventDefault();
+
+  // Create object from form data
+  const title = $("#story-title").val();
+  const author = $("#story-author").val();
+  const url = $("#story-url").val();
+  const newStory = {title, author, url};
+
+  // Create instance of Story class using currentUser and form data
+  const storyInst = await storyList.addStory(currentUser, newStory);
+
+  // Create HTML to display new story and add it to the top of #all-stories-list
+  const $story = generateStoryMarkup(storyInst);
+  $allStoriesList.prepend($story);
+
+  // Clear and hide form
+  $addStoryForm.trigger("reset");
+  $addStoryForm.hide();
+}
+
+  // Handle submit event on form
+  $addStoryForm.on("submit", addNewStoryOnPage);
+
