@@ -74,19 +74,19 @@ class StoryList {
    */
 
   async addStory(user, newStory) {
-    console.log(user); // Test ********************************************
-    console.log(newStory); // Test ****************************************
+    // Since this method only works with a current logged-in user, the token 
+    // can be grabbed from localStorage
     const token = localStorage.getItem("token");
-    console.log(token); // Test ********************************************
+
+    // Make a post request to add the story to the API
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "POST",
       data: {"token": token, "story": newStory}
     });
 
-    console.log(response); // Test *****************************************
-
-    const story = new Story(
+    // Create a Story instance with the data
+    return new Story(
       {
         storyId: response.data.story.storyId,
         title: newStory.title,
@@ -96,9 +96,6 @@ class StoryList {
         createdAt: response.data.story.createdAt
       }
     );
-    console.log(story); // Test ********************************************
-
-    return story;
   }
 }
 
