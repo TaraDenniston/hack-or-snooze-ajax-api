@@ -12,6 +12,21 @@ async function getAndShowStoriesOnStart() {
   putStoriesOnPage();
 }
 
+/** Compare given storyID with the storyIDs in the user's list of favorites.
+ *  If there is a match, return true; if not, return false */
+
+function isFavorite(storyId) {
+  if (currentUser.favorites !== 0) {
+    for (let story of currentUser.favorites) {
+      if (story.storyId === storyId) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 /**
  * A render method to render HTML for an individual Story instance
  * - story: an instance of Story
@@ -23,9 +38,20 @@ function generateStoryMarkup(story) {
   console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+
+  // Decide whether to use hollow or solid star based on whether the story
+  // is favorited or not
+  let symbol = "";
+
+  if (isFavorite(story.storyId)) {
+    symbol = "fa-solid fa-star";
+  } else {
+    symbol = "fa-regular fa-star";
+  }
+
   return $(`
       <li id="${story.storyId}">
-        <i class="fa-regular fa-star"></i>
+        <i class="${symbol}"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -51,7 +77,6 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
-
 
 /** Get the data from the #add-story-form, call the .addStory method, and 
  * put the new story on the page. */
