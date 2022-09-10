@@ -24,8 +24,19 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    let hostName = this.url;
+
+    // shorten url to exclude "http://" or "https://"
+    const hostNameBeg = hostName.indexOf(':') + 3;
+    hostName = hostName.substr(hostNameBeg);
+
+    // shorten url again to exclude subdirectories (if any) 
+    const hostNameEnd = hostName.indexOf('/');
+    if (hostNameEnd > 0) {
+      hostName = hostName.substr(0, hostNameEnd);
+    }
+
+    return hostName;
   }
 }
 
