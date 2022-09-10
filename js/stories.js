@@ -20,11 +20,12 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+  console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+        <i class="fa-regular fa-star"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -79,4 +80,24 @@ async function addNewStoryOnPage(evt) {
 
   // Handle submit event on form
   $addStoryForm.on("submit", addNewStoryOnPage);
+
+
+  function putFavoritesOnPage() {
+    console.debug("putFavoritesOnPage");
+  
+    // If the user does not have any favorites, show a message
+    if (currentUser.favorites.length === 0) {
+      $favoriteStoriesList.append("<p>No favorites have been added yet</p>")
+      
+    // Otherwise loop through all of the user's favorite stories and generate 
+    // HTML for them
+    } else {
+      for (let story of currentUser.favorites) {
+        const $story = generateStoryMarkup(story);
+        $favoriteStoriesList.append($story);
+      }
+    }
+  
+    $favoriteStoriesList.show();
+  }
 
