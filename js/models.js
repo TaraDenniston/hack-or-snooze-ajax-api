@@ -26,11 +26,11 @@ class Story {
   getHostName() {
     let hostName = this.url;
 
-    // shorten url to exclude "http://" or "https://"
+    // Shorten URL to exclude scheme
     const hostNameBeg = hostName.indexOf(':') + 3;
     hostName = hostName.substr(hostNameBeg);
 
-    // shorten url again to exclude subdirectories (if any) 
+    // Shorten URL again to exclude subdirectories (if any) 
     const hostNameEnd = hostName.indexOf('/');
     if (hostNameEnd > 0) {
       hostName = hostName.substr(0, hostNameEnd);
@@ -224,5 +224,23 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  async addFavorite(storyId) {
+    // Add story to list of user favorites stored on the API
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: "POST",
+      data: { token: this.loginToken },
+    });
+  }
+
+  async deleteFavorite(storyId) {
+    // Remove story from list of user favorites stored on the API
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: "DELETE",
+      data: { token: this.loginToken },
+    });
   }
 }
