@@ -16,7 +16,7 @@ async function getAndShowStoriesOnStart() {
  *  If there is a match, return true; if not, return false */
 
 function isFavorite(storyId) {
-  if (currentUser.favorites !== 0) {
+  if (currentUser.favorites.length !== 0) {
     for (let story of currentUser.favorites) {
       if (story.storyId === storyId) {
         return true;
@@ -109,6 +109,8 @@ async function addNewStoryOnPage(evt) {
 
   function putFavoritesOnPage() {
     console.debug("putFavoritesOnPage");
+
+    $favoriteStoriesList.empty();
   
     // If the user does not have any favorites, show a message
     if (currentUser.favorites.length === 0) {
