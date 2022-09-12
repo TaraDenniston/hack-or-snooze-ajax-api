@@ -51,6 +51,36 @@ async function signup(evt) {
 
 $signupForm.on("submit", signup);
 
+/** Handle clicking on star of story to add/remove favorite */
+
+async function toggleFavorite(evt) {
+  console.debug("toggleFavorite", evt);
+  evt.preventDefault();
+
+  const $star = $(evt.target);
+
+  // Fetch the storyId from the event's parent  
+  const storyId = $star.parent().attr("id");
+
+  
+
+  // If clicked story has a hollow star...
+  if ($star.attr("class") === "fa-regular fa-star") {
+    // ...change the star to solid and add to favorites
+    $star.attr("class", "fa-solid fa-star");
+    currentUser = await currentUser.addFavorite(storyId);
+
+  // If clicked story has a solid star...
+  } else if ($star.attr("class") === "fa-solid fa-star") {
+    // ...change the star to hollow and remove from favorites
+    $star.attr("class", "fa-regular fa-star");
+    currentUser = await currentUser.removeFavorite(storyId);
+
+  } else return;
+}
+
+$body.on("click", "i", toggleFavorite);
+
 /** Handle click of logout button
  *
  * Remove their credentials from localStorage and refresh page
@@ -111,6 +141,11 @@ function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
   $allStoriesList.show();
+  $loginForm.hide();
+  $signupForm.hide();
 
   updateNavOnLogin();
 }
+
+
+
