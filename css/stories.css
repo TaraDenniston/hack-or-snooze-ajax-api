@@ -10,6 +10,14 @@
   margin: 10px 0;
 }
 
+.stories-list > li > i.fa-solid {
+  color: rgb(230, 195, 0);
+}
+
+.stories-list > li > i.del:hover {
+  color: red;
+}
+
 #stories-loading-msg {
   font-weight: bold;
   font-size: 150%;
