@@ -51,7 +51,8 @@ function generateStoryMarkup(story) {
 
   return $(`
       <li id="${story.storyId}">
-        <i class="${symbol}"></i>
+        <i class="del"></i>
+        <i class="fav ${symbol}"></i>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -103,28 +104,55 @@ async function addNewStoryOnPage(evt) {
   $addStoryForm.hide();
 }
 
-  // Handle submit event on form
-  $addStoryForm.on("submit", addNewStoryOnPage);
+// Handle submit event on form
+$addStoryForm.on("submit", addNewStoryOnPage);
 
 
-  function putFavoritesOnPage() {
-    console.debug("putFavoritesOnPage");
+/** Put all of the user's favorite stories on the page. */
 
-    $favoriteStoriesList.empty();
+function putFavoritesOnPage() {
+  console.debug("putFavoritesOnPage");
+
+  $favoriteStoriesList.empty();
   
-    // If the user does not have any favorites, show a message
-    if (currentUser.favorites.length === 0) {
-      $favoriteStoriesList.append("<p>No favorites have been added yet</p>")
+  // If the user does not have any favorites, show a message
+  if (currentUser.favorites.length === 0) {
+    $favoriteStoriesList.append("<p>No favorites have been added yet</p>")
       
-    // Otherwise loop through all of the user's favorite stories and generate 
-    // HTML for them
-    } else {
-      for (let story of currentUser.favorites) {
-        const $story = generateStoryMarkup(story);
-        $favoriteStoriesList.append($story);
-      }
+  // Otherwise loop through all of the user's favorite stories and generate 
+  // HTML for them
+  } else {
+    for (let story of currentUser.favorites) {
+      const $story = generateStoryMarkup(story);
+      $favoriteStoriesList.append($story);
     }
+  }
   
-    $favoriteStoriesList.show();
+  $favoriteStoriesList.show();
+}
+
+
+/** Put all of the user's own stories on the page. */
+
+function putMyStoriesOnPage() {
+  console.debug("putMyStoriesOnPage");
+
+  $userStoriesList.empty();
+  
+  // If the user does not have any stories of their own, show a message
+  if (currentUser.ownStories.length === 0) {
+    $userStoriesList.append("<p>User has not submitted any stories</p>")
+      
+  // Otherwise loop through all of the user's favorite stories and generate 
+  // HTML for them
+  } else {
+    for (let story of currentUser.ownStories) {
+      const $story = generateStoryMarkup(story);
+      $userStoriesList.append($story);
+    }
   }
 
+  $("i.del").addClass("fa fa-trash");
+  
+  $userStoriesList.show();
+}
