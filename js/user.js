@@ -62,24 +62,43 @@ async function toggleFavorite(evt) {
   // Fetch the storyId from the event's parent  
   const storyId = $star.parent().attr("id");
 
-  
-
   // If clicked story has a hollow star...
-  if ($star.attr("class") === "fa-regular fa-star") {
+  if ($star.attr("class") === "fav fa-regular fa-star") {
     // ...change the star to solid and add to favorites
-    $star.attr("class", "fa-solid fa-star");
+    $star.attr("class", "fav fa-solid fa-star");
     currentUser = await currentUser.addFavorite(storyId);
 
   // If clicked story has a solid star...
-  } else if ($star.attr("class") === "fa-solid fa-star") {
+  } else if ($star.attr("class") === "fav fa-solid fa-star") {
     // ...change the star to hollow and remove from favorites
-    $star.attr("class", "fa-regular fa-star");
+    $star.attr("class", "fav fa-regular fa-star");
     currentUser = await currentUser.removeFavorite(storyId);
 
   } else return;
 }
 
-$body.on("click", "i", toggleFavorite);
+$body.on("click", "i.fav", toggleFavorite);
+
+/** Handle clicking on trash icon of own story to delete */
+
+async function deleteOwnStory(evt) {
+  console.debug("toggleFavorite", evt);
+  evt.preventDefault();
+
+  const $trash = $(evt.target);
+
+  // Fetch the storyId from the event's parent  
+  const storyId = $trash.parent().attr("id");
+
+  // Delete user's story from API and update currentUser and storyList
+  currentUser = await currentUser.deleteStory(storyId);
+  storyList = await StoryList.getStories();
+
+  // Reload list of user's own stories without the deleted one
+  putMyStoriesOnPage();
+}
+
+$body.on("click", "i.del", deleteOwnStory);
 
 /** Handle click of logout button
  *
