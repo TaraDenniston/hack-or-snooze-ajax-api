@@ -96,17 +96,24 @@ class StoryList {
       data: {"token": token, "story": newStory}
     });
 
+    let { story } = response.data;
+
     // Create a Story instance with the data
-    return new Story(
+    const addedStory = new Story(
       {
-        storyId: response.data.story.storyId,
-        title: newStory.title,
-        author: newStory.author,
-        url: newStory.url,
-        username: user.username,
-        createdAt: response.data.story.createdAt
+        storyId: story.storyId,
+        title: story.title,
+        author: story.author,
+        url: story.url,
+        username: story.username,
+        createdAt: story.createdAt
       }
     );
+
+    // Add the new story to StoryList
+    this.stories.unshift(addedStory);
+
+    return addedStory;
   }
 }
 
@@ -275,11 +282,28 @@ class User {
   /** Delete user's story from the API */
 
   async deleteStory(storyId) {
-    const response = await axios({
+    const storyResponse = await axios({
       url: `${BASE_URL}/stories/${storyId}`,
       method: "DELETE",
       data: { token: this.loginToken }
     });
-    console.log(response); // Test **********************************
+
+    const userResponse = await axios({
+      url: `${BASE_URL}/users/${this.username}`,
+      method: "GET",
+      params: { token: this.loginToken }
+    })
+    let { user } = userResponse.data;
+
+    return new User(
+      {
+        username: user.username,
+        name: user.name,
+        createdAt: user.createdAt,
+        favorites: user.favorites,
+        ownStories: user.stories
+      },
+      this.loginToken
+    );
   }
 }
