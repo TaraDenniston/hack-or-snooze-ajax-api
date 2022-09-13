@@ -35,7 +35,7 @@ function isFavorite(storyId) {
  */
 
 function generateStoryMarkup(story) {
-  console.debug("generateStoryMarkup", story);
+  // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
 
@@ -95,6 +95,9 @@ async function addNewStoryOnPage(evt) {
   // Create instance of Story class using currentUser and form data
   const storyInst = await storyList.addStory(currentUser, newStory);
 
+  // Add new story to current user's list of own stories
+  currentUser.ownStories.push(storyInst);
+
   // Create HTML to display new story and add it to the top of #all-stories-list
   const $story = generateStoryMarkup(storyInst);
   $allStoriesList.prepend($story);
@@ -102,6 +105,12 @@ async function addNewStoryOnPage(evt) {
   // Clear and hide form
   $addStoryForm.trigger("reset");
   $addStoryForm.hide();
+
+
+
+  // // Populate page again with all stories (including new story)
+  // storyList = await StoryList.getStories();
+  // putStoriesOnPage();
 }
 
 // Handle submit event on form
