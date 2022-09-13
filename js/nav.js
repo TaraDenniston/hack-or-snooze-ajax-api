@@ -15,11 +15,14 @@ function navAllStories(evt) {
 $body.on("click", "#nav-all", navAllStories);
 
 
-/** Show submit story form when user clicks on "submit" on top nav */
+/** Show submit story form when user clicks on "submit" on top nav with main 
+ *  list of all stories underneath */
 
 function navSubmit(evt) {
   console.debug("navSubmit", evt);
+  hidePageComponents();
   $addStoryForm.show();
+  putStoriesOnPage();
 }
 
 $navSubmit.on("click", navSubmit);
