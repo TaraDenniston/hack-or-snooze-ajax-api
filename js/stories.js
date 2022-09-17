@@ -43,11 +43,15 @@ function generateStoryMarkup(story) {
   // is favorited or not
   let symbol = "";
 
-  if (isFavorite(story.storyId)) {
-    symbol = "fa-solid fa-star";
-  } else {
-    symbol = "fa-regular fa-star";
+  // Only check for favorites if a user is logged in
+  if (currentUser) {
+    if (isFavorite(story.storyId)) {
+      symbol = "fa-solid fa-star";
+    } else {
+      symbol = "fa-regular fa-star";
+    }
   }
+  
 
   return $(`
       <li id="${story.storyId}">
