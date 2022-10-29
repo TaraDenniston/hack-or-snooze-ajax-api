@@ -69,7 +69,7 @@ async function toggleFavorite(evt) {
     currentUser = await currentUser.addFavorite(storyId);
 
   // If clicked story has a solid star...
-  } else ($star.attr("class") === "fav fa-solid fa-star") {
+  } else if ($star.attr("class") === "fav fa-solid fa-star") {
     // ...change the star to hollow and remove from favorites
     $star.attr("class", "fav fa-regular fa-star");
     currentUser = await currentUser.removeFavorite(storyId);
